@@ -1,0 +1,81 @@
+#
+#--------------------------------------------------------------------------
+# Image Setup
+#--------------------------------------------------------------------------
+#
+
+FROM php:7.0-fpm
+
+LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
+
+# Set Environment Variables
+ENV DEBIAN_FRONTEND noninteractive
+
+ARG user
+ARG uid
+
+#
+#--------------------------------------------------------------------------
+# Software's Installation
+#--------------------------------------------------------------------------
+#
+# Installing tools and PHP extentions using "apt", "docker-php", "pecl",
+#
+
+# Install "curl", "libmemcached-dev", "libpq-dev", "libjpeg-dev",
+#         "libpng12-dev", "libfreetype6-dev", "libssl-dev", "libmcrypt-dev",
+RUN set -eux; \
+    sed -i 's/^deb /# deb /g' /etc/apt/sources.list; \
+    echo 'deb http://archive.debian.org/debian/ stretch main contrib non-free' >> /etc/apt/sources.list; \
+    apt-get update; \
+    apt-get upgrade -y; \
+    apt-get install -y --no-install-recommends \
+            curl \
+            libmemcached-dev \
+            libz-dev \
+            libpq-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libfreetype6-dev \
+            libssl-dev \
+            libwebp-dev \
+             git \
+            libonig-dev \
+            libxml2-dev \
+            zip \
+            unzip \
+            libzip-dev \
+            -y mariadb-client \
+            libmcrypt-dev; \
+    # cleanup
+    rm -rf /var/lib/apt/lists/*
+COPY --from=composer:2.2.0 /usr/bin/composer /usr/bin/composer
+
+# Install PHP extensions
+RUN docker-php-ext-install zip mysqli pdo_mysql mbstring exif pcntl bcmath gd && docker-php-ext-enable mysqli
+
+RUN set -eux; \
+    # Install the PHP mcrypt extention
+    docker-php-ext-install mcrypt; \
+    # Install the PHP pdo_mysql extention
+    docker-php-ext-install pdo_mysql; \
+    # Install the PHP pdo_pgsql extention
+    docker-php-ext-install pdo_pgsql; \
+    # Install the PHP gd library
+    docker-php-ext-configure gd \
+            --enable-gd-native-ttf \
+            --with-jpeg-dir=/usr/lib \
+            --with-webp-dir=/usr/lib \
+            --with-freetype-dir=/usr/include/freetype2; \
+    docker-php-ext-install gd; \
+    php -r 'var_dump(gd_info());'
+
+    # Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+# Set working directory
+WORKDIR /var/www
+
+USER $user
