@@ -130,11 +130,25 @@ return [
     'menu' => [
         'Menu',
         [
-            'text'        => 'Home',
-            'url'         => 'admin/pages',
+            'text'        => 'Dashboard',
+            'url'         => 'admin',
             'icon'        => 'far fa-file',
-            'label'       => 4,
-            'label_color' => 'danger',
+        ],
+        [
+            'text' => 'Financeiro',
+            'icon' => '',
+            'submenu' => [
+               [
+                'text' => 'Saldo',
+                'url' => 'admin/balance',
+                'icon' => ''
+               ],
+               [
+                'text' => 'Histórico',
+                'url' => 'admin/history',
+                'icon' => ''
+               ]
+            ],
         ],
     ],
 
