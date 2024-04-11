@@ -20,9 +20,13 @@
 
 @section('content')
 <div class="box">
+@include('admin.includes.message')
+
     <div class="box-header">
-        <a href="{{ route('balance.deposit') }}" class="btn btn-info">Recarregar</a>
-        <a href="" class="btn btn-primary">Sacar</a>
+        <a href="{{ route('admin.balance.deposit') }}" class="btn btn-info">Recarregar</a>
+        @if($amount > 0 )
+            <a href="{{ route('admin.balance.withdraw.index') }}" class="btn btn-primary">Sacar</a>
+        @endif
     </div>
 
 <div class="row">

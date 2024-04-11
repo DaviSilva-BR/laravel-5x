@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Model\Balance;
+use App\Model\Historic;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -30,5 +31,10 @@ class User extends Authenticatable
     public function balance()
     {
         return $this->hasOne(Balance::class);
+    }
+
+    public function historics()
+    {
+        return $this->hasMany(Historic::class);
     }
 }
