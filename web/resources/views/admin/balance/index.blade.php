@@ -26,7 +26,9 @@
         <a href="{{ route('admin.balance.deposit') }}" class="btn btn-info">Recarregar</a>
         @if($amount > 0 )
             <a href="{{ route('admin.balance.withdraw.index') }}" class="btn btn-primary">Sacar</a>
-        @endif
+            <a href="{{ route('admin.balance.transfer.index') }}" class="btn btn-success">Transferir</a>
+
+            @endif
     </div>
 
 <div class="row">

@@ -14,6 +14,10 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
     $this->get('balance/withdraw', 'BalanceController@withdraw')->name('admin.balance.withdraw.index');
     $this->post('balance/withdraw/store', 'BalanceController@withdrawStore')->name('admin.balance.withdraw.store');
 
+    $this->get('balance/transfer', 'BalanceController@transfer')->name('admin.balance.transfer.index');
+    $this->post('balance/transfer/search', 'BalanceController@transferSearch')->name('admin.balance.transfer.search');
+    $this->post('balance/transfer/store', 'BalanceController@transferStore')->name('admin.balance.transfer.store');
+
 });
 
 $this->get('/', 'Site\SiteController@index')->name('site.home');
