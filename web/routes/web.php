@@ -18,6 +18,9 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
     $this->post('balance/transfer/search', 'BalanceController@transferSearch')->name('admin.balance.transfer.search');
     $this->post('balance/transfer/store', 'BalanceController@transferStore')->name('admin.balance.transfer.store');
 
+    $this->get('historic', 'BalanceController@historic')->name('admin.historic.index');
+    $this->any('historic-search', 'BalanceController@historicSearch')->name('admin.historic.search');
+
 });
 
 $this->get('/', 'Site\SiteController@index')->name('site.home');

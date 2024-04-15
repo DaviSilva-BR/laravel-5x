@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MoneyValidationFormRequest;
+use App\Model\Historic;
 use App\User;
 
 class BalanceController extends Controller
 {
+    private $totalPage = 2;
     public function index()
     {
         $balance = auth()->user()->balance;
@@ -102,8 +104,28 @@ class BalanceController extends Controller
         }
     }
 
-   
+   public function historic(Historic $historic)
+   {
+        $historics = auth()->user()->
+            historics()
+            ->with(['userSender'])
+            ->paginate($this->totalPage);
 
+        $types = $historic->type();    
+        return view('admin.historic.index', compact('historics', 'types'));
+   }
+
+
+   public function historicSearch(Request $request, Historic $historic)
+   {
+    $dataForm = $request->except('_token');
+
+    $historics = $historic->search($dataForm, $this->totalPage);
+
+    $types = $historic->type();
+
+    return view('admin.historic.index', compact('historics', 'types', 'dataForm'));
+}
 }
     
     
